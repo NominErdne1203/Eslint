@@ -79,44 +79,55 @@ export type QueryGetUserArgs = {
 
 export type User = {
   __typename?: 'User';
-  category?: Maybe<UserCategory>;
-  completed: Scalars['Boolean']['output'];
+  bio?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
   password: Scalars['String']['output'];
 };
 
 export type UserCategory = {
   __typename?: 'UserCategory';
+  bio: Scalars['String']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  image: Scalars['String']['output'];
+  name: Scalars['String']['output'];
   password: Scalars['String']['output'];
 };
 
 export type UserCategoryCreateInput = {
+  bio: Scalars['String']['input'];
   email: Scalars['String']['input'];
+  image: Scalars['String']['input'];
+  name: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
 export type UserCategoryUpdateInput = {
+  bio?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  image: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
 };
 
 export type UserCreateInput = {
-  categoryId?: InputMaybe<Scalars['ID']['input']>;
-  completed: Scalars['Boolean']['input'];
+  bio?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
+  image?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
 };
 
 export type UserUpdateInput = {
-  categoryId?: InputMaybe<Scalars['ID']['input']>;
-  completed?: InputMaybe<Scalars['Boolean']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
+  bio?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  password: Scalars['String']['input'];
+  image?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -235,17 +246,21 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  category?: Resolver<Maybe<ResolversTypes['UserCategory']>, ParentType, ContextType>;
-  completed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserCategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserCategory'] = ResolversParentTypes['UserCategory']> = {
+  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -258,47 +273,46 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type UserFragment = { __typename?: 'User', id: string, email: string, password: string, completed: boolean };
+export type UserFragment = { __typename?: 'User', id: string, email: string, password: string };
 
 export type GetUserListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserListQuery = { __typename?: 'Query', getUserList: Array<{ __typename?: 'User', id: string, email: string, password: string, completed: boolean }> };
+export type GetUserListQuery = { __typename?: 'Query', getUserList: Array<{ __typename?: 'User', id: string, email: string, password: string }> };
 
 export type GetUserQueryVariables = Exact<{
   getUserId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, email: string, password: string, completed: boolean } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, email: string, password: string } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: UserCreateInput;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, password: string, completed: boolean } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, password: string } };
 
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'User', id: string, email: string, password: string, completed: boolean } | null };
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'User', id: string, email: string, password: string } | null };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UserUpdateInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, password: string, completed: boolean } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, password: string } };
 
 export const UserFragmentDoc = gql`
     fragment User on User {
   id
   email
   password
-  completed
 }
     `;
 export const GetUserListDocument = gql`

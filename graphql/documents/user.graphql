@@ -2,7 +2,6 @@ fragment User on User {
   id
   email
   password
-  completed
 }
 
 query GetUserList {

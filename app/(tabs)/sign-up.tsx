@@ -1,10 +1,11 @@
 'use client';
-import { useCreateUserMutation } from '@/graphql/generated';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, View, Image } from 'react-native';
+
+import { useCreateUserMutation } from '@/graphql/generated';
 
 export default function SignUpPage(): React.ReactNode {
   const [blur, setBlur] = useState(true);
@@ -21,8 +22,7 @@ export default function SignUpPage(): React.ReactNode {
       variables: {
         input: {
           email,
-          password,
-          completed: false,
+          password
         },
       },
     });
@@ -51,7 +51,7 @@ export default function SignUpPage(): React.ReactNode {
               />
             </Text>
             <Text style={{ fontSize: 30, color: ' #000', marginBottom: 30, textAlign: 'center' }}>
-              Create Account
+              Create Profile
             </Text>
           </View>
           <TextInput
@@ -128,6 +128,8 @@ export default function SignUpPage(): React.ReactNode {
                   color: '#000',
                 }}
                 placeholder="email or phone number"
+                value={email}
+                onChange={(event) => setEmail(event.nativeEvent.text)}
               />
               <TextInput
                 style={{
@@ -140,6 +142,8 @@ export default function SignUpPage(): React.ReactNode {
                   color: '#000',
                 }}
                 placeholder="password"
+                value={password}
+                onChange={(event) => setPassword(event.nativeEvent.text)}
               />
               <View style={{ alignItems: 'center' }}>
                 <Text
@@ -154,7 +158,7 @@ export default function SignUpPage(): React.ReactNode {
                     alignItems: 'center',
                     color: '#FF70BC',
                   }}
-                  onPress={() => setBlur(false)}>
+                  onPress={handleSignUp}>
                   Next
                 </Text>
                 <Text onPress={() => router.push('../login')}>Already have an Account?</Text>

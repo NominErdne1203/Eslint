@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#ECB4d0',
+    paddingTop: 50,
   },
   email: {
     fontSize: 20,

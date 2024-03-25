@@ -1,17 +1,39 @@
+import * as ImagePicker from 'expo-image-picker';
 import { Link } from 'expo-router';
+// import { stringify } from 'querystring';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+
+import {  useUpdateUserMutation } from '@/graphql/generated';
 
 export default function TwoJapa(): React.JSX.Element {
   const [name, setName] = useState('Tanai eej');
   const [bio, setBio] = useState('add bio');
 
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(
+    'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg',
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const [isBioe, setIsBioe] = useState(false);
 
+  const [UpdateUserMutation, { data, loading, error }] = useUpdateUserMutation();
+
+  if (loading) return <Text>Loading</Text>;
+  if (error) return <Text>{error.message}</Text>;
+
+  const SaveImage = async (): Promise<void> => {
+    await UpdateUserMutation({
+      variables: {
+        input: {
+          image,
+        },
+      },
+    });
+    console.log(data);
+  };
+
+  
   const handleBioChange = (text: React.SetStateAction<string>): void => {
     setBio(text);
     setIsBioe(true);
