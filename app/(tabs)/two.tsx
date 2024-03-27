@@ -1,37 +1,48 @@
 import * as ImagePicker from 'expo-image-picker';
 import { Link } from 'expo-router';
 // import { stringify } from 'querystring';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
-import {  useUpdateUserMutation } from '@/graphql/generated';
+import {  useGetUserQuery, useUpdateUserMutation } from '@/graphql/generated';
 
 export default function TwoJapa(): React.JSX.Element {
-  const [name, setName] = useState('Tanai eej');
+  const [name, setName] = useState('');
   const [bio, setBio] = useState('add bio');
-
   const [image, setImage] = useState(
     'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg',
   );
-
   const [isEditing, setIsEditing] = useState(false);
   const [isBioe, setIsBioe] = useState(false);
 
-  const [UpdateUserMutation, { data, loading, error }] = useUpdateUserMutation();
+  // const { data, loading, error } = useUpdateUserMutation();
 
-  if (loading) return <Text>Loading</Text>;
-  if (error) return <Text>{error.message}</Text>;
+  // if (loading) return <Text>Loading</Text>;
+  // if (error) return <Text>{error.message}</Text>;
+  
+  // Fetch user data using useGetUserQuery
+  const { data: userData, loading: userDataLoading } = useGetUserQuery();
 
-  const SaveImage = async (): Promise<void> => {
-    await UpdateUserMutation({
-      variables: {
-        input: {
-          image,
-        },
-      },
-    });
-    console.log(data);
-  };
+  // Set name, bio, and image when component mounts
+  useEffect(() => {
+    if (!userDataLoading && userData?.getUser) {
+      setName(userData.getUser.name);
+      // setImage(userData.getUser.image);
+    }
+  }, [userData, userDataLoading]);
+
+
+  // const SaveImage = async (): Promise<void> => {
+  //   await UpdateUserMutation({
+  //     variables: {
+  //       input: {
+  //         image,
+  //         id: ''
+  //       },
+  //     },
+  //   });
+  //   console.log(data);
+  // };
 
   
   const handleBioChange = (text: React.SetStateAction<string>): void => {
@@ -74,6 +85,15 @@ export default function TwoJapa(): React.JSX.Element {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
+    // await UpdateUserMutation({
+    //   variables: {
+    //     input: {
+    //       image,
+    //       id: '',
+    //     },
+    //   },
+    // });
+    // console.log(data);
   };
 
   return (

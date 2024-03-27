@@ -11,6 +11,7 @@ export default function RootLayoutNav(): React.JSX.Element {
       <View style={{ flex: 1 }}>
         <Stack initialRouteName="(tabs)" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
+          {/* <Stack.Screen name="assets/images" /> */}
         </Stack>
       </View>
     </ApolloProvider>

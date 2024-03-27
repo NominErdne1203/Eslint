@@ -25,7 +25,7 @@ export default function Loginsign(): React.ReactNode {
                 color: '#fff',
                 textAlign: 'center',
               }}
-              onPress={() => router.push('../(tabs)/login')}>
+              onPress={() => router.push('../zza')}>
               Login
             </Text>
             <Text style={{ textAlign: 'center' }}>Or</Text>
@@ -39,7 +39,7 @@ export default function Loginsign(): React.ReactNode {
                 color: '#1B85F3',
                 textAlign: 'center',
               }}
-              onPress={() => router.push('/login')}>
+              onPress={() => router.push('../sign-up')}>
               SignUp
             </Text>
           </BlurView>

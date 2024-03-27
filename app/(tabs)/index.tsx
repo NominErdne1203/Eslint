@@ -73,7 +73,7 @@ export default function LoginPage(): React.ReactNode {
                 onPress={() => handleLogin}>
                 Done
               </Text>
-              <Text onPress={() => router.push('../(tabs)/sign-up')}>Create Account?</Text>
+              <Text onPress={() => router.push('../sign-up')}>Create Account?</Text>
             </View>
           </BlurView>
         </LinearGradient>

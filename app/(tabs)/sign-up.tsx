@@ -3,14 +3,15 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, View, Image } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { useCreateUserMutation } from '@/graphql/generated';
 
 export default function SignUpPage(): React.ReactNode {
-  const [blur, setBlur] = useState(true);
+  // const [blur, setBlur] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // const [name, setName] = useState('');
 
   const [createUserMutation, { data, loading, error }] = useCreateUserMutation();
 
@@ -21,88 +22,24 @@ export default function SignUpPage(): React.ReactNode {
     await createUserMutation({
       variables: {
         input: {
-          email,
-          password
+          email: email,
+          password: password,
         },
       },
     });
+    if (email === '' || password === '') {
+      return alert('Please enter email and password');
+    }
+    // else if (!email.includes('@') || !email.endsWith('.com')) {
+    //   return alert('Please enter a valid email address');
+    // } else if (password.length !== 8 || password.length < 8) {
+    //   return alert('Password must be 8 characters long at least');
+    // }
+    else {
+      router.push('../createProfile');
+    }
+
     console.log(data);
-  };
-
-  // const handleChangeText = (text: React.SetStateAction<string>): void => {
-  //   // setName(text);
-  // }
-  // const { email }
-  // const handleSignUp = async () => {
-  //   await createUserMutation({
-  //     input: {
-  //     }
-  //   });
-
-  const CreateProfile = (): React.JSX.Element => {
-    return (
-      <View>
-        <BlurView intensity={100} style={styles.blurContainer}>
-          <View style={{ flexDirection: 'column' }}>
-            <Text style={{ fontSize: 20, top: -50 }} onPress={() => setBlur(true)}>
-              <Image
-                style={{ width: 30, height: 30 }}
-                source={require('../../assets/images/back.svg')}
-              />
-            </Text>
-            <Text style={{ fontSize: 30, color: ' #000', marginBottom: 30, textAlign: 'center' }}>
-              Create Profile
-            </Text>
-          </View>
-          <TextInput
-            style={{
-              width: 250,
-              borderColor: '#FF70BC',
-              borderWidth: 1,
-              borderRadius: 10,
-              padding: 10,
-              marginBottom: 30,
-              color: '#000',
-            }}
-            placeholder="email or phone number"
-            value={email}
-            onChange={() => setEmail(email)}
-          />
-          <TextInput
-            style={{
-              width: 250,
-              borderColor: '#FF70BC',
-              borderWidth: 1,
-              borderRadius: 10,
-              padding: 10,
-              marginBottom: 30,
-              color: '#000',
-            }}
-            placeholder="password"
-            value={password}
-            onChange={() => setPassword(password)}
-          />
-          <View style={{ alignItems: 'center' }}>
-            <Text
-              style={{
-                width: 100,
-                borderColor: '#FF70BC',
-                borderWidth: 2,
-                borderRadius: 10,
-                padding: 10,
-                marginBottom: 30,
-                textAlign: 'center',
-                alignItems: 'center',
-                color: '#FF70BC',
-              }}
-              onPress={() => handleSignUp}>
-              Next
-            </Text>
-            <Text onPress={() => router.push('../login')}>Already have an Account?</Text>
-          </View>
-        </BlurView>
-      </View>
-    );
   };
 
   return (
@@ -112,60 +49,60 @@ export default function SignUpPage(): React.ReactNode {
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
         <LinearGradient colors={['#FFC9E6', '#ffffff']} style={styles.gradientContainer}>
-          {blur && (
-            <BlurView intensity={100} style={styles.blurContainer}>
-              <Text style={{ fontSize: 30, color: ' #000', marginBottom: 30, textAlign: 'center' }}>
-                Create Account
+          {/* {blur && ( */}
+          <BlurView intensity={100} style={styles.blurContainer}>
+            <Text style={{ fontSize: 30, color: ' #000', marginBottom: 30, textAlign: 'center' }}>
+              Create Account
+            </Text>
+            <TextInput
+              style={{
+                width: 250,
+                borderColor: '#FF70BC',
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 10,
+                marginBottom: 30,
+                color: '#000',
+              }}
+              placeholder="email or phone number"
+              value={email}
+              onChange={(event) => setEmail(event.nativeEvent.text)}
+            />
+            <TextInput
+              style={{
+                width: 250,
+                borderColor: '#FF70BC',
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 10,
+                marginBottom: 30,
+                color: '#000',
+              }}
+              placeholder="password"
+              value={password}
+              onChange={(event) => setPassword(event.nativeEvent.text)}
+            />
+            <View style={{ alignItems: 'center' }}>
+              <Text
+                style={{
+                  width: 100,
+                  borderColor: '#FF70BC',
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  padding: 10,
+                  marginBottom: 30,
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  color: '#FF70BC',
+                }}
+                onPress={handleSignUp}>
+                Next
               </Text>
-              <TextInput
-                style={{
-                  width: 250,
-                  borderColor: '#FF70BC',
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  padding: 10,
-                  marginBottom: 30,
-                  color: '#000',
-                }}
-                placeholder="email or phone number"
-                value={email}
-                onChange={(event) => setEmail(event.nativeEvent.text)}
-              />
-              <TextInput
-                style={{
-                  width: 250,
-                  borderColor: '#FF70BC',
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  padding: 10,
-                  marginBottom: 30,
-                  color: '#000',
-                }}
-                placeholder="password"
-                value={password}
-                onChange={(event) => setPassword(event.nativeEvent.text)}
-              />
-              <View style={{ alignItems: 'center' }}>
-                <Text
-                  style={{
-                    width: 100,
-                    borderColor: '#FF70BC',
-                    borderWidth: 2,
-                    borderRadius: 10,
-                    padding: 10,
-                    marginBottom: 30,
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    color: '#FF70BC',
-                  }}
-                  onPress={handleSignUp}>
-                  Next
-                </Text>
-                <Text onPress={() => router.push('../login')}>Already have an Account?</Text>
-              </View>
-            </BlurView>
-          )}
-          {!blur && CreateProfile()}
+              <Text onPress={() => router.push('../')}>Already have an Account?</Text>
+            </View>
+          </BlurView>
+          {/* )} */}
+          {/* {!blur && CreateProfile()} */}
         </LinearGradient>
       </SafeAreaView>
     </View>
