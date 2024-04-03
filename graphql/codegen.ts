@@ -20,3 +20,5 @@ const config: CodegenConfig = {
 };
 
 export default config;
+
+// , 'http://localhost:3001/api/graphql'

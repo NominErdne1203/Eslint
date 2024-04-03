@@ -25,7 +25,7 @@ export default function Loginsign(): React.ReactNode {
                 color: '#fff',
                 textAlign: 'center',
               }}
-              onPress={() => router.push('../zza')}>
+              onPress={() => router.push('../')}>
               Login
             </Text>
             <Text style={{ textAlign: 'center' }}>Or</Text>

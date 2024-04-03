@@ -1,13 +1,14 @@
 'use client';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { useCreateUserMutation } from '@/graphql/generated';
 
 export default function SignUpPage(): React.ReactNode {
+  const router = useRouter();
   // const [blur, setBlur] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,22 +25,29 @@ export default function SignUpPage(): React.ReactNode {
         input: {
           email: email,
           password: password,
+          name: '',
+          image: '',
+          bio: ''
         },
       },
+      onCompleted: ({ createUser }) => {
+        router.push(`../createProfile?userId=${createUser.id}`);
+      },
     });
-    if (email === '' || password === '') {
-      return alert('Please enter email and password');
+    if (email === '') {
+      return alert('Please enter a valid email address');
+    }
+
+    if (password === '') {
+      return alert('Please enter a valid password.');
     }
     // else if (!email.includes('@') || !email.endsWith('.com')) {
     //   return alert('Please enter a valid email address');
     // } else if (password.length !== 8 || password.length < 8) {
     //   return alert('Password must be 8 characters long at least');
     // }
-    else {
-      router.push('../createProfile');
-    }
-
-    console.log(data);
+    console.log(data)
+    console.log(error)
   };
 
   return (
@@ -141,3 +149,4 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
+//  export default handleSignUp;

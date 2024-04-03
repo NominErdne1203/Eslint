@@ -1,12 +1,15 @@
 import * as ImagePicker from 'expo-image-picker';
-import { Link } from 'expo-router';
+// import { Link } from 'expo-router';
 // import { stringify } from 'querystring';
+import { useGlobalSearchParams, Link, } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 
-import {  useGetUserQuery, useUpdateUserMutation } from '@/graphql/generated';
+import { useUpdateUserMutation } from '@/graphql/generated';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 export default function TwoJapa(): React.JSX.Element {
+  const { setUser, user } = useCurrentUser();
   const [name, setName] = useState('');
   const [bio, setBio] = useState('add bio');
   const [image, setImage] = useState(
@@ -14,37 +17,76 @@ export default function TwoJapa(): React.JSX.Element {
   );
   const [isEditing, setIsEditing] = useState(false);
   const [isBioe, setIsBioe] = useState(false);
+  const searchParams = useGlobalSearchParams();
+  console.log(JSON.stringify(searchParams, null, 2));
 
-  // const { data, loading, error } = useUpdateUserMutation();
+  // const router = useRouter();
 
-  // if (loading) return <Text>Loading</Text>;
-  // if (error) return <Text>{error.message}</Text>;
+  // const [UpdateUserMutation, { data, loading, error }] = useUpdateUserMutation();
+  const [UpdateUserMutaion, { data, loading, error }] = useUpdateUserMutation();
+
+  if (loading) return <Text>Loading</Text>
+  if (error) return <Text>{error.message}</Text>;
   
-  // Fetch user data using useGetUserQuery
-  const { data: userData, loading: userDataLoading } = useGetUserQuery();
 
-  // Set name, bio, and image when component mounts
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [localUser, setLocalUser] = useState(() => {
+    if (user) return user;
+    return {
+      id: '',
+      name: '',
+      email: '',
+      image: '',
+      bio: '',
+    };
+  });
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks  
   useEffect(() => {
-    if (!userDataLoading && userData?.getUser) {
-      setName(userData.getUser.name);
-      // setImage(userData.getUser.image);
+    if (user) {
+      setName(user?.name || '');
+      setBio(user?.bio || '');
+      setImage(user?.image || '');
+      setLocalUser(user);
     }
-  }, [userData, userDataLoading]);
-
+  }, [user]);
 
   // const SaveImage = async (): Promise<void> => {
-  //   await UpdateUserMutation({
+  //   console.log('running');
+  //   setBlur(false);
+  //   await updateUserMutaion({
   //     variables: {
   //       input: {
-  //         image,
-  //         id: ''
+  //         id: searchParams.userId as string,
+  //         name,
+  //         password: '',
+  //         image: '',
+  //         bio: '',
   //       },
   //     },
+  //     onCompleted: ({ updateUser }) => {
+  //       console.log(JSON.stringify(updateUser, null, 2));
+  //       setUser(updateUser);
+  //     },
   //   });
+  //   if (name === '') {
+  //     return alert('Please enter your name');
+  //   } else {
+  //     router.push('../two');
+  //   }
+
   //   console.log(data);
   // };
 
-  
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (user) {
+      setName(user?.name || '');
+      // setBio(user?.bio!= null? `${user?.bio}` : '');
+      setImage(user?.image || '');
+    }
+  }, [user]);
+
   const handleBioChange = (text: React.SetStateAction<string>): void => {
     setBio(text);
     setIsBioe(true);
@@ -72,6 +114,10 @@ export default function TwoJapa(): React.JSX.Element {
 
   const handleSave = (): void => {
     setIsEditing(!isEditing);
+    localUser.name = name;
+    localUser.image = image;
+    localUser.bio = bio;
+    setUser(localUser);
   };
 
   const pickImage = async (): Promise<void> => {
@@ -85,15 +131,20 @@ export default function TwoJapa(): React.JSX.Element {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
-    // await UpdateUserMutation({
-    //   variables: {
-    //     input: {
-    //       image,
-    //       id: '',
-    //     },
-    //   },
-    // });
-    // console.log(data);
+    await UpdateUserMutaion({
+      variables: {
+        input: {
+          id: searchParams.userId as string,
+          image: image,
+        },
+      },
+
+      onCompleted: ({ updateUser }) => {
+        console.log(JSON.stringify(updateUser, null, 2));
+        setUser(updateUser);
+        console.log(data);
+      },
+    });
   };
 
   return (

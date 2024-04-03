@@ -1,6 +1,6 @@
-import { GraphQLResolveInfo } from 'graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -33,8 +33,19 @@ export type Mutation = {
   updateUserCategory?: Maybe<UserCategory>;
 };
 
+export type PostMutation = {
+  __typename?: 'PostMutation';
+  createPost: Post;
+  deletePost?: Maybe<Post>;
+  updatePost: Post;
+};
+
 export type MutationCreateUserArgs = {
   input: UserCreateInput;
+};
+
+export type MutationCreatePostArgs = {
+  input: PostCreateInput;
 };
 
 export type MutationCreateUserCategoryArgs = {
@@ -45,12 +56,19 @@ export type MutationDeleteUserArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationDeletePostArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationDeleteUserCategoryArgs = {
   id: Scalars['ID']['input'];
 };
 
 export type MutationUpdateUserArgs = {
   input: UserUpdateInput;
+};
+export type MutationUpdatePostArgs = {
+  input: PostUpdateInput;
 };
 
 export type MutationUpdateUserCategoryArgs = {
@@ -81,6 +99,12 @@ export type User = {
   image?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   password: Scalars['String']['output'];
+};
+
+export type Post = {
+  id: Scalars['ID']['output'];
+  postImage?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserCategory = {
@@ -118,12 +142,24 @@ export type UserCreateInput = {
   password: Scalars['String']['input'];
 };
 
+export type PostCreateInput = {
+  postImage?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['output'];
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UserUpdateInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   image?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PostUpdateInput = {
+  postImage?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['output'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -220,6 +256,9 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<object>;
   Query: ResolverTypeWrapper<object>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Post: ResolverTypeWrapper<Post>;
+  PostCreateInput: PostCreateInput;
+  PostUpdateInput: PostUpdateInput;
   User: ResolverTypeWrapper<User>;
   UserCategory: ResolverTypeWrapper<UserCategory>;
   UserCategoryCreateInput: UserCategoryCreateInput;
@@ -235,6 +274,9 @@ export type ResolversParentTypes = {
   Mutation: object;
   Query: object;
   String: Scalars['String']['output'];
+  Post: Post;
+  PostCreateInput: PostCreateInput;
+  PostUpdateInput: PostUpdateInput;
   User: User;
   UserCategory: UserCategory;
   UserCategoryCreateInput: UserCategoryCreateInput;
@@ -253,6 +295,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateUserArgs, 'input'>
   >;
+  createPost?: Resolver<
+    ResolversTypes['Post'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreatePostArgs, 'input'>
+  >;
   createUserCategory?: Resolver<
     Maybe<ResolversTypes['UserCategory']>,
     ParentType,
@@ -265,6 +313,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeleteUserArgs, 'id'>
   >;
+  deletePost?: Resolver<
+    Maybe<ResolversTypes['Post']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeletePostArgs, 'id'>
+  >;
   deleteUserCategory?: Resolver<
     Maybe<ResolversTypes['User']>,
     ParentType,
@@ -276,6 +330,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateUserArgs, 'input'>
+  >;
+  updatePost?: Resolver<
+    ResolversTypes['Post'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePostArgs, 'input'>
   >;
   updateUserCategory?: Resolver<
     Maybe<ResolversTypes['UserCategory']>,
@@ -333,8 +393,10 @@ export type UserCategoryResolvers<
 
 export type Resolvers<ContextType = unknown> = {
   Mutation?: MutationResolvers<ContextType>;
+  PostMutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  Post?: UserResolvers<ContextType>;
   UserCategory?: UserCategoryResolvers<ContextType>;
 };
 
@@ -342,27 +404,47 @@ export type UserFragment = {
   __typename?: 'User';
   id: string;
   email: string;
+  name?: string | null;
   password: string;
-  image: string;
-  name: string;
+};
+export type PostFragment = {
+  __typename?: 'Post';
+  id: string;
+  postImage: string;
+  title: string;
+  completed: boolean;
 };
 
 export type GetUserListQueryVariables = Exact<{ [key: string]: never }>;
 
+export type GetPostListQueryVariables = Exact<{ [key: string]: never }>;
 export type GetUserListQuery = {
   __typename?: 'Query';
   getUserList: {
     __typename?: 'User';
     id: string;
     email: string;
+    name?: string | null;
     password: string;
-    image: string;
-    name: string;
+  }[];
+};
+export type GetPostListQuery = {
+  __typename?: 'PostQuery';
+  getPostList: {
+    __typename?: 'Post';
+    id: string;
+    postImage: string;
+    title: string;
+    completed: boolean;
   }[];
 };
 
 export type GetUserQueryVariables = Exact<{
   getUserId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+export type CreatePostMutationVariables = Exact<{
+  input: PostCreateInput;
 }>;
 
 export type GetUserQuery = {
@@ -371,9 +453,18 @@ export type GetUserQuery = {
     __typename?: 'User';
     id: string;
     email: string;
+    name?: string | null;
     password: string;
-    image: string;
-    name: string;
+  } | null;
+};
+export type GetPostQuery = {
+  __typename?: 'Query';
+  getUser?: {
+    __typename?: 'Post';
+    id: string;
+    postImage: string;
+    title: string;
+    completed: boolean;
   } | null;
 };
 
@@ -387,9 +478,18 @@ export type CreateUserMutation = {
     __typename?: 'User';
     id: string;
     email: string;
+    name?: string | null;
     password: string;
-    image: string;
-    name: string;
+  };
+};
+export type CreatePostMutation = {
+  __typename?: 'Mutation';
+  createPost: {
+    __typename?: 'Post';
+    id: string;
+    postImage: string;
+    title: string;
+    completed: boolean;
   };
 };
 
@@ -399,23 +499,68 @@ export type DeleteUserMutationVariables = Exact<{
 
 export type DeleteUserMutation = {
   __typename?: 'Mutation';
-  deleteUser?: { __typename?: 'User'; id: string; email: string; password: string } | null;
+  deleteUser?: {
+    __typename?: 'User';
+    id: string;
+    email: string;
+    name?: string | null;
+    password: string;
+  } | null;
+};
+
+export type DeletePostMutation = {
+  __typename?: 'Mutation';
+  deletePost?: {
+    __typename?: 'User';
+    id: string;
+    postImage: string;
+    title: string;
+    completed: boolean;
+  } | null;
 };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UserUpdateInput;
 }>;
+export type UpdatePostMutationVariables = Exact<{
+  input: PostUpdateInput;
+}>;
 
 export type UpdateUserMutation = {
   __typename?: 'Mutation';
-  updateUser: { __typename?: 'User'; id: string; email: string; password: string; name: string; image: string; };
+  updateUser: {
+    __typename?: 'User';
+    id: string;
+    email: string;
+    name?: string | null;
+    password: string;
+  };
+};
+export type UpdatePostMutation = {
+  __typename?: 'Mutation';
+  updatePost: {
+    __typename?: 'Post';
+    id: string;
+    postImage: string;
+    title: string;
+    completed: boolean;
+  };
 };
 
 export const UserFragmentDoc = gql`
   fragment User on User {
     id
     email
+    name
     password
+  }
+`;
+export const PostFragmentDoc = gql`
+  fragment PostFields on Post {
+    id
+    postImage
+    title
+    completed
   }
 `;
 export const GetUserListDocument = gql`
@@ -426,11 +571,19 @@ export const GetUserListDocument = gql`
   }
   ${UserFragmentDoc}
 `;
+export const GetPostListDocument = gql`
+  query GetPostList {
+    getPostList {
+      ...PostFields
+    }
+  }
+  ${PostFragmentDoc}
+`;
 
 /**
  * __useGetUserListQuery__
  *
- * To run a query within a React component, call `useGetUserListQuery` and pass it unknownoptions that fit your needs.
+ * To run a query within a React component, call `useGetUserListQuery` and pass it any options that fit your needs.
  * When your component renders, `useGetUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
@@ -482,10 +635,19 @@ export const GetUserDocument = gql`
   ${UserFragmentDoc}
 `;
 
+export const GetPostDocument = gql`
+  query GetPost($getPostId: ID) {
+    getPost(id: $getPostId) {
+      ...PostFields
+    }
+  }
+  ${PostFragmentDoc}
+`;
+
 /**
  * __useGetUserQuery__
  *
- * To run a query within a React component, call `useGetUserQuery` and pass it unknownoptions that fit your needs.
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
  * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
@@ -532,13 +694,24 @@ export type CreateUserMutationFn = Apollo.MutationFunction<
   CreateUserMutation,
   CreateUserMutationVariables
 >;
-
+export const CreatePostDocument = gql`
+  mutation CreatePost($input: PostCreateInput!) {
+    createPost(input: $input) {
+      ...PostFields
+    }
+  }
+  ${PostFragmentDoc}
+`;
+export type CreatePostMutationFn = Apollo.MutationFunction<
+  CreatePostMutation,
+  CreatePostMutationVariables
+>;
 /**
  * __useCreateUserMutation__
  *
- * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it unknownoptions that fit your needs.
+ * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
  * When your component renders, `useCreateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at unknowntime to execute the mutation
+ * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
@@ -581,9 +754,9 @@ export type DeleteUserMutationFn = Apollo.MutationFunction<
 /**
  * __useDeleteUserMutation__
  *
- * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it unknownoptions that fit your needs.
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
  * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at unknowntime to execute the mutation
+ * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
@@ -622,13 +795,28 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<
   UpdateUserMutation,
   UpdateUserMutationVariables
 >;
+// export const UpdatePostDocument = gql`
+//   mutation UpdatePost($input: PostUpdateInput!) {
+//     updatePost(input: $input) {
+//       id
+//       title
+//       postImage
+//       completed
+//     }
+//   }
+// `;
+
+// export type UpdatePostMutationFn = Apollo.MutationFunction<
+//   UpdatePostMutation,
+//   UpdatePostMutationVariables
+// >;
 
 /**
  * __useUpdateUserMutation__
  *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it unknownoptions that fit your needs.
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
  * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at unknowntime to execute the mutation
+ * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
@@ -655,3 +843,19 @@ export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserMutation,
   UpdateUserMutationVariables
 >;
+
+// export function useUpdatePostMutation(
+//   baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>,
+// ) {
+//   const options = { ...defaultOptions, ...baseOptions };
+//   return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(
+//     UpdatePostDocument,
+//     options,
+//   );
+// }
+// export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+// export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+// export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<
+//   UpdatePostMutation,
+//   UpdatePostMutationVariables
+// >;

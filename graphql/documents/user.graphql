@@ -1,7 +1,9 @@
 fragment User on User {
-  id
-  email
-  password
+  id: ID!
+  email: string
+  name: string
+  password: string
+  image: string
 }
 
 query GetUserList {

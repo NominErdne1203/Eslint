@@ -1,24 +1,62 @@
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useGlobalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, SafeAreaView } from 'react-native';
 
-import { useGetUserListQuery } from '../../graphql/generated';
+// import { useGetUserQuery } from '@/graphql/generated';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+// import { GetAllUsers } from '../users';
 
 export default function LoginPage(): React.ReactNode {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { data, loading, error } = useGetUserListQuery();
+  const { setUser } = useCurrentUser();
 
-  if (loading) return <Text>Loading</Text>;
+  const searchParams = useGlobalSearchParams();
+  console.log(JSON.stringify(searchParams, null, 2));
 
-  if (error) return <Text>Error: {error.message}</Text>;
+  // const [{ data, loading, error }] = useGetUserQuery();
+
+  // if (loading) return <Text>Loading</Text>;
+
+  // if (error) return <Text>Error: {error.message}</Text>;
+
   const handleLogin = async (): Promise<void> => {
-    if (data?.getUserList[0].email === email && data?.getUserList[0].password === password) {
-      router.push('../posts');
-    }
+    console.log('ajiljin');
+    // setBlur(false);
+    getUserMutaion({
+      variables: {
+        input: {
+          id: searchParams.userId as string,
+        },
+      },
+      onCompleted: ({ getUser }) => {
+        if (getUser?.email === email && getUser?.password === password) {
+          router.push('../two');
+        } else {
+          console.log('asd');
+        }
+        // router.push(`../createProfile?userId=${createUser.id}`);
+      },
+    });
+
+    console.log('pressed');
   };
+
+  // const handleLogin = async (): Promise<void> => {
+  //   if (
+  //     Boolean(data) &&
+  //     data.getUser.email === email &&
+  //     data.getUser.password === password
+  //   ) {
+  //     router.push('../two');
+  //   } else {
+  //     console.log('baihgui');
+  //   }
+
+  //   console.log(data?.getUserQuery);
+  // };
 
   return (
     // <ImageBackground
@@ -70,7 +108,7 @@ export default function LoginPage(): React.ReactNode {
                   alignItems: 'center',
                   color: '#FF70BC',
                 }}
-                onPress={() => handleLogin}>
+                onPress={handleLogin}>
                 Done
               </Text>
               <Text onPress={() => router.push('../sign-up')}>Create Account?</Text>
@@ -114,3 +152,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
+function getUserMutaion(arg0: {
+  variables: {
+    input: { id: string; name: void; email: void; password: void; image: string; bio: string };
+  };
+  onCompleted: ({ updateUser }: { updateUser: unknown }) => void;
+}) {
+  throw new Error('Function not implemented.');
+}

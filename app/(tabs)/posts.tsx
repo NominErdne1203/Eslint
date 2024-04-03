@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
@@ -25,46 +26,48 @@ export default function PostPage(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.email}>Cute Paws</Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          // justifyContent:"center",
-          alignItems: 'center',
-          marginHorizontal: 15,
-          backgroundColor: '#FFC9E6',
-          width: '100%',
-        }}>
-        <Image
-          style={{ width: 50, height: 50, margin: 10, borderRadius: 100 }}
-          source={{
-            uri: 'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg',
-          }}
-        />
-        <Text
+      <LinearGradient colors={['#FFC9E6', '#ffffff']} style={styles.gradientContainer}>
+        <Text style={styles.email}>Cute Paws</Text>
+        <View
           style={{
-            borderColor: '#000',
-            width: 240,
-            borderWidth: 1,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 20,
-          }}
-          onPress={() => router.push('../createPost')}
-          // value={text}
-          // onChangeText={handleChangeText}
-          // placeholder="Create post"
-          // onSubmitEditing={handleSubmit}
-        >
-          CreatePost
-        </Text>
-      </View>
+            flexDirection: 'row',
+            // justifyContent:"center",
+            alignItems: 'center',
+            marginHorizontal: 15,
+            backgroundColor: '#FFC9E6',
+            width: '100%',
+          }}>
+          <Image
+            style={{ width: 50, height: 50, margin: 10, borderRadius: 100 }}
+            source={{
+              uri: 'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg',
+            }}
+          />
+          <Text
+            style={{
+              borderColor: '#000',
+              width: 240,
+              borderWidth: 1,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+              borderRadius: 20,
+            }}
+            onPress={() => router.push('../createPost')}
+            // value={text}
+            // onChangeText={handleChangeText}
+            // placeholder="Create post"
+            // onSubmitEditing={handleSubmit}
+          >
+            CreatePost
+          </Text>
+        </View>
 
-      {/* {showModal && (
+        {/* {showModal && (
         <View>
           <Text style={{ borderWidth: 1, borderRadius: 5, padding: 10 }}>{text}</Text>
         </View>
       )} */}
+      </LinearGradient>
     </View>
   );
 }
@@ -79,5 +82,10 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  gradientContainer: {
+    flex: 1,
+    // justifyContent: 'center',
+    borderRadius: 20,
   },
 });

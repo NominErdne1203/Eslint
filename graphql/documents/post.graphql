@@ -1,0 +1,35 @@
+fragment Post on Post {
+  id: ID!
+  title: string
+  postImage: string
+}
+
+query GetPostList {
+  getPostList {
+    ...Post
+  }
+}
+
+query GetPost($getPostId: ID) {
+  getPost(id: $getPostId) {
+    ...Post
+  }
+}
+
+mutation CreatePost($input: PostCreateInput!) {
+  createPost(input: $input) {
+    ...Post
+  }
+}
+
+mutation DeletePost($id: ID!) {
+  deletePost(id: $id) {
+    ...Post
+  }
+}
+
+mutation UpdatePost($input: PostUpdateInput!) {
+  updatePost(input: $input) {
+    ...Post
+  }
+}
