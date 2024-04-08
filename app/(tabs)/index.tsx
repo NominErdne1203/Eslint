@@ -4,9 +4,7 @@ import { router, useGlobalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, SafeAreaView } from 'react-native';
 
-// import { useGetUserQuery } from '@/graphql/generated';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-// import { GetAllUsers } from '../users';
 
 export default function LoginPage(): React.ReactNode {
   const [email, setEmail] = useState('');
@@ -16,52 +14,19 @@ export default function LoginPage(): React.ReactNode {
   const searchParams = useGlobalSearchParams();
   console.log(JSON.stringify(searchParams, null, 2));
 
-  // const [{ data, loading, error }] = useGetUserQuery();
-
-  // if (loading) return <Text>Loading</Text>;
-
-  // if (error) return <Text>Error: {error.message}</Text>;
-
   const handleLogin = async (): Promise<void> => {
-    console.log('ajiljin');
+    console.log('working');
     // setBlur(false);
-    getUserMutaion({
-      variables: {
-        input: {
-          id: searchParams.userId as string,
-        },
-      },
-      onCompleted: ({ getUser }) => {
-        if (getUser?.email === email && getUser?.password === password) {
-          router.push('../two');
-        } else {
-          console.log('asd');
-        }
-        // router.push(`../createProfile?userId=${createUser.id}`);
-      },
-    });
-
+    if (searchParams.userId && email && password) {
+      setUser({ id: searchParams.userId, email, password });
+      router.push('../two');
+    } else {
+      console.log('asd');
+    }
     console.log('pressed');
   };
 
-  // const handleLogin = async (): Promise<void> => {
-  //   if (
-  //     Boolean(data) &&
-  //     data.getUser.email === email &&
-  //     data.getUser.password === password
-  //   ) {
-  //     router.push('../two');
-  //   } else {
-  //     console.log('baihgui');
-  //   }
-
-  //   console.log(data?.getUserQuery);
-  // };
-
   return (
-    // <ImageBackground
-    //   source={require('../../assets/images/backgroundImg.jpg')}
-    //   style={styles.backgroundImage}>
     <View style={styles.container}>
       <SafeAreaView style={styles.container}>
         <LinearGradient colors={['#FFC9E6', '#ffffff']} style={styles.gradientContainer}>
@@ -80,7 +45,8 @@ export default function LoginPage(): React.ReactNode {
                 color: '#000',
               }}
               placeholder="email or phone number"
-              onChange={() => setEmail(email)}
+              value={email}
+              onChangeText={setEmail}
             />
             <TextInput
               style={{
@@ -93,7 +59,8 @@ export default function LoginPage(): React.ReactNode {
                 color: '#000',
               }}
               placeholder="password"
-              onChange={() => setPassword(password)}
+              value={password}
+              onChangeText={setPassword}
             />
             <View style={{ alignItems: 'center' }}>
               <Text
@@ -117,7 +84,6 @@ export default function LoginPage(): React.ReactNode {
         </LinearGradient>
       </SafeAreaView>
     </View>
-    // </ImageBackground>
   );
 }
 
@@ -152,11 +118,3 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
-function getUserMutaion(arg0: {
-  variables: {
-    input: { id: string; name: void; email: void; password: void; image: string; bio: string };
-  };
-  onCompleted: ({ updateUser }: { updateUser: unknown }) => void;
-}) {
-  throw new Error('Function not implemented.');
-}

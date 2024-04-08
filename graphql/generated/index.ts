@@ -601,6 +601,13 @@ export function useGetUserListQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
 }
+
+export function useGetPostListQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPostListQuery, GetPostListQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetPostListQuery, GetPostListQueryVariables>(GetPostListDocument, options);
+}
 export function useGetUserListLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>,
 ) {
@@ -737,6 +744,21 @@ export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<
   CreateUserMutation,
   CreateUserMutationVariables
+  >;
+export function useCreatePostMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(
+    CreatePostDocument,
+    options,
+  );
+}
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<
+  CreatePostMutation,
+  CreatePostMutationVariables
 >;
 export const DeleteUserDocument = gql`
   mutation DeleteUser($id: ID!) {

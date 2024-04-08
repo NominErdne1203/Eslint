@@ -27,7 +27,6 @@ export default function TwoJapa(): React.JSX.Element {
 
   if (loading) return <Text>Loading</Text>
   if (error) return <Text>{error.message}</Text>;
-  
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [localUser, setLocalUser] = useState(() => {
@@ -81,7 +80,7 @@ export default function TwoJapa(): React.JSX.Element {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (user) {
-      setName(user?.name || '');
+      setName(user?.name != null || '');
       // setBio(user?.bio!= null? `${user?.bio}` : '');
       setImage(user?.image || '');
     }

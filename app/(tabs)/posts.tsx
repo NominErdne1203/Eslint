@@ -4,26 +4,36 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+
+import { useGetPostListQuery } from '@/graphql/generated';
 // import { FullWindowOverlay } from 'react-native-screens';
 
 export default function PostPage(): React.JSX.Element {
-  // const [text, setText] = useState('');
-  // const [showModal, setShowModal] = useState(false);
+  const { data, error, loading } = useGetPostListQuery();
 
-  // const handleChangeText = (text: React.SetStateAction<string>): void => {
-  //   setText(text);
-  // };
-  // const CreatePost = (): void => {
-  //   setShowModal(true);
-  // };
+  // if (loading)
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  //       <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 30 }}>Loading...</Text>
+  //     </View>
+  //   );
 
-  // const handleSubmit = (): void => {
-  //   if (text.trim()) {
-  //     console.log('Post submitted:', CreatePost);
-  //     setText('');
-  //   }
+  // if (error) {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  //       <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 30 }}>
+  //         Error: {error.message}
+  //       </Text>
+  //     </View>
+  //   );
+  // }
+  // const handleItemClick = (id: string) => {
+  //   getPost({
+  //     variables: {
+  //       id,
+  //     },
+  //   });
   // };
-
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#FFC9E6', '#ffffff']} style={styles.gradientContainer}>
@@ -52,21 +62,17 @@ export default function PostPage(): React.JSX.Element {
               paddingVertical: 5,
               borderRadius: 20,
             }}
-            onPress={() => router.push('../createPost')}
-            // value={text}
-            // onChangeText={handleChangeText}
-            // placeholder="Create post"
-            // onSubmitEditing={handleSubmit}
-          >
+            onPress={() => router.push('../createPost')}>
             CreatePost
           </Text>
         </View>
-
-        {/* {showModal && (
-        <View>
-          <Text style={{ borderWidth: 1, borderRadius: 5, padding: 10 }}>{text}</Text>
-        </View>
-      )} */}
+        {data?.getPostList.map((post) => (
+          <>
+            <Text key={post.id} style={{ color: '#fff', fontWeight: 'bold', fontSize: 30 }}>
+              {post.title}
+            </Text>
+          </>
+        ))}
       </LinearGradient>
     </View>
   );
